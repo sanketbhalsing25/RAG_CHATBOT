@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical RAG Chatbot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app-container">
+    <header class="header">
+        <h1>🩺 Medical RAG Assistant</h1>
+        <p>Ask questions based on medical documents</p>
+    </header>
+
+    <main class="chat-container" id="chatContainer">
+        <div class="message bot">
+            Hello! 👋  
+            <br>
+            Ask me anything from the uploaded medical documents.
+        </div>
+    </main>
+
+    <footer class="input-container">
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Type your medical question..."
+            autocomplete="off"
+        />
+        <button onclick="sendMessage()">Send</button>
+    </footer>
+</div>
+
+<script>
+function sendMessage() {
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage(message, "user");
+    input.value = "";
+
+    appendMessage("Thinking...", "bot", true);
+
+    fetch("/get", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ msg: message })
+    })
+    .then(res => res.json())
+    .then(data => {
+        removeLoading();
+        appendMessage(data.answer, "bot");
+    })
+    .catch(() => {
+        removeLoading();
+        appendMessage("⚠️ Error connecting to server.", "bot");
+    });
+}
+
+function appendMessage(text, sender, isLoading = false) {
+    const chat = document.getElementById("chatContainer");
+    const msg = document.createElement("div");
+
+    msg.className = `message ${sender}`;
+    if (isLoading) msg.id = "loadingMsg";
+
+    msg.innerText = text;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function removeLoading() {
+    const loading = document.getElementById("loadingMsg");
+    if (loading) loading.remove();
+}
+</script>
+
+</body>
+</html>
