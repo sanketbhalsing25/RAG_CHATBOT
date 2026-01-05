@@ -53,6 +53,44 @@ Open http://localhost:8080/ and ask questions via the UI (`templates/chatbot.htm
 
 ##  High-level Architecture
 
+```
+RAG_CHATBOT/
+│
+├── Data/                       # Source documents for RAG
+│   ├── Medical_book.pdf
+│   └── MEDICAL.pdf
+│
+├── src/                        # Core application logic
+│   ├── __init__.py
+│   ├── helper.py               # PDF loading, chunking, embeddings
+│   └── prompt.py               # System & user prompt templates
+│
+├── static/                     # Frontend static files
+│   └── style.css               # Chat UI styling
+│
+├── templates/                  # HTML templates
+│   └── chatbot.html            # Chatbot UI
+│
+├── tests/                      # Experiments & testing
+│   └── trials.ipynb            # Notebook for RAG testing
+│
+├── venv/                       # Python virtual environment
+│
+├── app.py                      # Application entry point (Flask/FastAPI)
+├── store_index.py              # Vector store indexing script
+│
+├── requirements.txt            # Python dependencies
+├── Dockerfile                  # Docker image configuration
+├── setup.py                    # Python package setup
+├── setup_project.sh            # Project setup automation script
+│
+├── .env                        # Environment variables (ignored in git)
+├── .gitignore                  # Git ignore rules
+├── LICENSE                     # Open-source license
+└── README.md                   # Project documentation
+
+```
+
 1. Data ingestion
    - `src/helper.py` uses `DirectoryLoader` / `PyPDFLoader` to load PDFs from `Data/`.
 2. Preprocessing
