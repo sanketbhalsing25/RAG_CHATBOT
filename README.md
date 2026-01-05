@@ -51,7 +51,7 @@ Open http://localhost:8080/ and ask questions via the UI (`templates/chatbot.htm
 
 ---
 
-##  High-level Architecture
+##  Folder Structure
 
 ```
 RAG_CHATBOT/
@@ -76,7 +76,7 @@ RAG_CHATBOT/
 │
 ├── venv/                       # Python virtual environment
 │
-├── app.py                      # Application entry point (Flask/FastAPI)
+├── app.py                      # Application entry point (Flask)
 ├── store_index.py              # Vector store indexing script
 │
 ├── requirements.txt            # Python dependencies
@@ -90,6 +90,8 @@ RAG_CHATBOT/
 └── README.md                   # Project documentation
 
 ```
+
+## High-level Architecture
 
 1. Data ingestion
    - `src/helper.py` uses `DirectoryLoader` / `PyPDFLoader` to load PDFs from `Data/`.
@@ -125,7 +127,7 @@ Flow: PDFs -> Loader -> Split -> Embeddings -> Pinecone index -> Retrieval -> LL
 - Prompt & Safety
   - The system prompt forces the assistant to **only use the provided context** and to answer “I don’t know based on the provided medical documents.” when appropriate—this reduces hallucinations but may increase "I don’t know" cases.
 
-- LLM: `ChatOpenAI(model_name="gpt-5", temperature=0.2)`
+- LLM: `ChatOpenAI(model_name="gpt-40", temperature=0.2)`
   - Lower temperature favors consistent answers. Production choices can use smaller, cheaper LLMs for latency/cost trade-offs or larger models for higher quality.
 
 ---
